@@ -139,9 +139,9 @@ static class Installer
         catch (System.ServiceProcess.TimeoutException) { }
     }
 
-    static bool ServiceExists() => ServiceController.GetServices().Any(s => s.ServiceName == AgentService.Name);
+    public static bool ServiceExists() => ServiceController.GetServices().Any(s => s.ServiceName == AgentService.Name);
 
-    static bool IsAdmin() => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+    public static bool IsAdmin() => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 
     static void Run(string file, params string[] args)
     {

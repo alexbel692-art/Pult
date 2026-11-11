@@ -4,11 +4,20 @@ namespace Shturval.Agent;
 
 static class Program
 {
+    [STAThread]
     static int Main(string[] args)
     {
         var cmd = args.Length > 0 ? args[0].ToLowerInvariant() : "";
+
+        // программа собрана как оконная — для команд из cmd подключаемся к консоли родителя
+        if (cmd is "install" or "uninstall" or "setpass" or "debug" or "help" or "/?" or "-h" or "--help")
+            Native.AttachConsole(-1);
+
         switch (cmd)
         {
+            case "":          // двойной щелчок — окно установки
+            case "setup":
+                return SetupUi.Run();
             case "service":   // так запускает Windows
                 ServiceBase.Run(new AgentService());
                 return 0;

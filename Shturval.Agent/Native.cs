@@ -98,6 +98,7 @@ static class Native
     public struct KEYBDINPUT { public ushort wVk, wScan; public uint dwFlags, time; public IntPtr dwExtraInfo; }
 
     // ---------- прочее ----------
+    [DllImport("kernel32.dll")] public static extern bool AttachConsole(int processId);
     [DllImport("user32.dll")] public static extern bool SetProcessDpiAwarenessContext(IntPtr value);
     public static readonly IntPtr DPI_PER_MONITOR_AWARE_V2 = new(-4);
 
