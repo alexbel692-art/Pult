@@ -40,6 +40,19 @@ jobs:
           name: Pult-win-x64
           path: dist/
 
+      - name: Последняя сборка в Releases (каждый push в main)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete latest --cleanup-tag -y 2>$null
+          $global:LASTEXITCODE = 0
+          gh release create latest Pult-win-x64.zip dist/PultAgent.exe dist/Pult.exe `
+            --target $env:GITHUB_SHA --prerelease `
+            --title "Последняя сборка" `
+            --notes "Автосборка из main ($($env:GITHUB_SHA.Substring(0,7))). PultAgent.exe — на компьютеры, Pult.exe — на сервер."
+
       - name: Релиз (для тегов v*)
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2

@@ -100,8 +100,8 @@ PultAgent.exe debug                     запустить без службы, 
 
 ## Готовые сборки
 
-Каждый push в `main` собирается в GitHub Actions (вкладка **Actions** → последний запуск → артефакт
-`Pult-win-x64`). Чтобы выпустить версию с zip в разделе **Releases**, поставьте тег:
+Каждый push в `main` собирается в GitHub Actions, и exe сразу выкладываются в **Releases →
+«Последняя сборка»**: https://github.com/alexbel692-art/Pult/releases/tag/latest Чтобы выпустить версию с zip в разделе **Releases**, поставьте тег:
 
 ```
 git tag v0.1.0 && git push origin v0.1.0
