@@ -1,0 +1,47 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Сборка агента
+        run: dotnet publish Pult.Agent/Pult.Agent.csproj -c Release -o out/agent
+
+      - name: Сборка консоли
+        run: dotnet publish Pult.Viewer/Pult.Viewer.csproj -c Release -o out/viewer
+
+      - name: Упаковка
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Copy-Item out/agent/PultAgent.exe dist/
+          Copy-Item out/viewer/Pult.exe dist/
+          Copy-Item README.md dist/
+          Compress-Archive -Path dist/* -DestinationPath Pult-win-x64.zip -Force
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Pult-win-x64
+          path: dist/
+
+      - name: Релиз (для тегов v*)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Pult-win-x64.zip
