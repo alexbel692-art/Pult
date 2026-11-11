@@ -3,14 +3,14 @@ using System.Security.Principal;
 using System.ServiceProcess;
 using Microsoft.Win32;
 
-namespace Pult.Agent;
+namespace Shturval.Agent;
 
 /// <summary>Установка, удаление и смена пароля агента из командной строки.</summary>
 static class Installer
 {
-    static string InstallDir => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Pult Agent");
-    static string InstalledExe => Path.Combine(InstallDir, "PultAgent.exe");
-    const string FirewallRule = "Pult Agent";
+    static string InstallDir => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Shturval Agent");
+    static string InstalledExe => Path.Combine(InstallDir, "ShturvalAgent.exe");
+    const string FirewallRule = "Shturval Agent";
 
     public static int Install(string[] args)
     {
@@ -59,8 +59,8 @@ static class Installer
         if (ServiceExists())
             Run("sc.exe", "config", AgentService.Name, "binPath=", bin, "start=", "auto");
         else
-            Run("sc.exe", "create", AgentService.Name, "binPath=", bin, "start=", "auto", "DisplayName=", "Pult Agent");
-        Run("sc.exe", "description", AgentService.Name, "Пульт: удалённое управление по локальной сети");
+            Run("sc.exe", "create", AgentService.Name, "binPath=", bin, "start=", "auto", "DisplayName=", "Shturval Agent");
+        Run("sc.exe", "description", AgentService.Name, "Штурвал: удалённое управление по локальной сети");
         Run("sc.exe", "failure", AgentService.Name, "reset=", "86400", "actions=", "restart/5000/restart/5000/restart/5000");
 
         Run("netsh", "advfirewall", "firewall", "delete", "rule", $"name={FirewallRule}");
@@ -99,7 +99,7 @@ static class Installer
     public static int SetPassword(string[] args)
     {
         if (!IsAdmin()) { Console.WriteLine("Запустите от имени администратора."); return 1; }
-        if (args.Length < 1 || args[0].Length < 8) { Console.WriteLine("Использование: PultAgent setpass <новый пароль, от 8 символов>"); return 1; }
+        if (args.Length < 1 || args[0].Length < 8) { Console.WriteLine("Использование: ShturvalAgent setpass <новый пароль, от 8 символов>"); return 1; }
         var cfg = AgentConfig.Load();
         cfg.SetPassword(args[0]);
         cfg.Save();
@@ -108,10 +108,10 @@ static class Installer
         return 0;
     }
 
-    /// <summary>Завершить все остальные процессы PultAgent (помощников).</summary>
+    /// <summary>Завершить все остальные процессы ShturvalAgent (помощников).</summary>
     public static void KillOtherInstances()
     {
-        foreach (var p in Process.GetProcessesByName("PultAgent"))
+        foreach (var p in Process.GetProcessesByName("ShturvalAgent"))
         {
             using (p)
             {

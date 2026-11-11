@@ -1,4 +1,4 @@
-namespace Pult.Viewer;
+namespace Shturval.Viewer;
 
 static class Program
 {

@@ -1,6 +1,6 @@
 using System.ServiceProcess;
 
-namespace Pult.Agent;
+namespace Shturval.Agent;
 
 static class Program
 {
@@ -23,12 +23,12 @@ static class Program
                 return Installer.SetPassword(args[1..]);
             default:
                 Console.WriteLine("""
-                    Пульт — агент удалённого управления
+                    Штурвал — агент удалённого управления
 
-                      PultAgent install --password <пароль> [--allow 192.168.1.10,10.0.0.0/24] [--port 5650] [--no-banner]
-                      PultAgent setpass <новый пароль>
-                      PultAgent uninstall [--purge]
-                      PultAgent debug        запуск без службы (для проверки)
+                      ShturvalAgent install --password <пароль> [--allow 192.168.1.10,10.0.0.0/24] [--port 5650] [--no-banner]
+                      ShturvalAgent setpass <новый пароль>
+                      ShturvalAgent uninstall [--purge]
+                      ShturvalAgent debug        запуск без службы (для проверки)
 
                     Запускать от имени администратора.
                     """);
@@ -43,7 +43,7 @@ static class Program
         if (!cfg.HasPassword)
         {
             Log.Write("помощник: пароль не задан, выполните install");
-            Console.WriteLine("Пароль не задан. Выполните: PultAgent install --password ...");
+            Console.WriteLine("Пароль не задан. Выполните: ShturvalAgent install --password ...");
             return 2;
         }
         try

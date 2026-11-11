@@ -3,9 +3,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Channels;
-using Pult.Common;
+using Shturval.Common;
 
-namespace Pult.Agent;
+namespace Shturval.Agent;
 
 /// <summary>Сетевая часть агента: принимает подключения консоли. Работает в сессии пользователя.</summary>
 sealed class HelperServer
@@ -111,7 +111,7 @@ sealed class RemoteSession
     {
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(ct);
         var banner = _cfg.Banner ? new Banner() : null;
-        banner?.Show($"К компьютеру подключён администратор ({_ip})");
+        banner?.Show($"Подключён администратор · {_ip}");
 
         var frames = FrameLoopAsync(linked.Token);
         try { await ReceiveLoopAsync(linked.Token); }
@@ -248,23 +248,23 @@ sealed class Banner
 
     sealed class BannerForm : Form
     {
+        readonly string _text;
+        readonly Font _font = new("Segoe UI Semibold", 10f);
+
         public BannerForm(string text)
         {
+            _text = text;
             FormBorderStyle = FormBorderStyle.None;
             ShowInTaskbar = false;
             TopMost = true;
             StartPosition = FormStartPosition.Manual;
-            BackColor = Color.FromArgb(190, 35, 35);
-            AutoSize = true;
-            AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            Controls.Add(new Label
-            {
-                Text = text,
-                AutoSize = true,
-                ForeColor = Color.White,
-                Font = new Font("Segoe UI", 10f, FontStyle.Bold),
-                Padding = new Padding(12, 8, 12, 8),
-            });
+            BackColor = Color.FromArgb(28, 32, 39);
+            DoubleBuffered = true;
+
+            var size = TextRenderer.MeasureText(text, _font);
+            ClientSize = new Size(size.Width + LogicalToDeviceUnits(58), LogicalToDeviceUnits(44));
+            using var path = Rounded(new Rectangle(0, 0, ClientSize.Width, ClientSize.Height), LogicalToDeviceUnits(12));
+            Region = new Region(path);
         }
 
         protected override bool ShowWithoutActivation => true;
@@ -282,9 +282,37 @@ sealed class Banner
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            PerformLayout();
             var wa = Screen.PrimaryScreen?.WorkingArea ?? new Rectangle(0, 0, 1024, 768);
-            Location = new Point(wa.Right - Width - 12, wa.Bottom - Height - 12);
+            int m = LogicalToDeviceUnits(16);
+            Location = new Point(wa.Right - Width - m, wa.Bottom - Height - m);
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            var g = e.Graphics;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            int U(int v) => LogicalToDeviceUnits(v);
+
+            // акцентная полоса слева и красная точка «идёт подключение»
+            using (var accent = new SolidBrush(Color.FromArgb(76, 141, 255))) g.FillRectangle(accent, 0, 0, U(4), Height);
+            int d = U(10);
+            using (var glow = new SolidBrush(Color.FromArgb(70, 242, 97, 91))) g.FillEllipse(glow, U(18) - U(4), (Height - d) / 2 - U(4), d + U(8), d + U(8));
+            using (var dot = new SolidBrush(Color.FromArgb(242, 97, 91))) g.FillEllipse(dot, U(18), (Height - d) / 2, d, d);
+
+            TextRenderer.DrawText(g, _text, _font, new Rectangle(U(40), 0, Width - U(44), Height), Color.FromArgb(233, 236, 242),
+                TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
+        }
+
+        static System.Drawing.Drawing2D.GraphicsPath Rounded(Rectangle r, int radius)
+        {
+            int dd = radius * 2;
+            var p = new System.Drawing.Drawing2D.GraphicsPath();
+            p.AddArc(r.X, r.Y, dd, dd, 180, 90);
+            p.AddArc(r.Right - dd, r.Y, dd, dd, 270, 90);
+            p.AddArc(r.Right - dd, r.Bottom - dd, dd, dd, 0, 90);
+            p.AddArc(r.X, r.Bottom - dd, dd, dd, 90, 90);
+            p.CloseFigure();
+            return p;
         }
     }
 }

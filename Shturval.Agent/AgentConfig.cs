@@ -1,14 +1,14 @@
 using System.Net;
 using System.Security.Cryptography;
 using System.Text.Json;
-using Pult.Common;
+using Shturval.Common;
 
-namespace Pult.Agent;
+namespace Shturval.Agent;
 
-/// <summary>Настройки агента: C:\ProgramData\Pult\agent.json (доступ только SYSTEM и администраторам).</summary>
+/// <summary>Настройки агента: C:\ProgramData\Shturval\agent.json (доступ только SYSTEM и администраторам).</summary>
 sealed class AgentConfig
 {
-    public static string Dir => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Pult");
+    public static string Dir => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Shturval");
     static string FilePath => Path.Combine(Dir, "agent.json");
 
     public int Port { get; set; } = Proto.DefaultPort;

@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Pult.Common;
+namespace Shturval.Common;
 
 public sealed class AuthFailedException(string message) : Exception(message);
 
@@ -56,7 +56,7 @@ public sealed class SecureChannel : IDisposable
         int m = Proto.Magic.Length;
         var hello = new byte[m + Proto.SaltLength + NonceLength];
         await s.ReadExactlyAsync(hello, ct);
-        if (!StartsWithMagic(hello)) throw new InvalidDataException("На этом порту не агент «Пульт»");
+        if (!StartsWithMagic(hello)) throw new InvalidDataException("На этом порту не агент «Штурвал»");
 
         var salt = hello[m..(m + Proto.SaltLength)];
         var serverNonce = hello[(m + Proto.SaltLength)..];
@@ -147,8 +147,8 @@ public sealed class SecureChannel : IDisposable
     static (byte[] c2s, byte[] s2c) SessionKeys(byte[] key, byte[] sn, byte[] cn)
     {
         var salt = Concat(sn, cn);
-        return (HKDF.DeriveKey(HashAlgorithmName.SHA256, key, 32, salt, Encoding.ASCII.GetBytes("pult c2s")),
-                HKDF.DeriveKey(HashAlgorithmName.SHA256, key, 32, salt, Encoding.ASCII.GetBytes("pult s2c")));
+        return (HKDF.DeriveKey(HashAlgorithmName.SHA256, key, 32, salt, Encoding.ASCII.GetBytes("shturval c2s")),
+                HKDF.DeriveKey(HashAlgorithmName.SHA256, key, 32, salt, Encoding.ASCII.GetBytes("shturval s2c")));
     }
 
     public void Dispose()

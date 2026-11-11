@@ -1,8 +1,8 @@
 using System.Net.Sockets;
 using System.Threading.Channels;
-using Pult.Common;
+using Shturval.Common;
 
-namespace Pult.Viewer;
+namespace Shturval.Viewer;
 
 /// <summary>Соединение консоли с агентом. Исходящие сообщения идут строго по очереди через один поток.</summary>
 sealed class RemoteClient : IDisposable

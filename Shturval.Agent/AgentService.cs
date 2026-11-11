@@ -2,9 +2,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.ServiceProcess;
 using System.Text;
-using static Pult.Agent.Native;
+using static Shturval.Agent.Native;
 
-namespace Pult.Agent;
+namespace Shturval.Agent;
 
 /// <summary>
 /// Служба Windows (SYSTEM). Сама экран не снимает — служба живёт в сессии 0 и экрана не видит.
@@ -13,8 +13,8 @@ namespace Pult.Agent;
 /// </summary>
 sealed class AgentService : ServiceBase
 {
-    public const string Name = "PultAgent";
-    public const string CadEventName = @"Global\PultAgentCAD";
+    public const string Name = "ShturvalAgent";
+    public const string CadEventName = @"Global\ShturvalAgentCAD";
 
     Thread? _thread;
     volatile bool _stopping;

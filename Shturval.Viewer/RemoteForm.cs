@@ -1,18 +1,18 @@
 using System.Text;
-using Pult.Common;
+using Shturval.Common;
 
-namespace Pult.Viewer;
+namespace Shturval.Viewer;
 
 /// <summary>Окно управления одним компьютером.</summary>
 sealed class RemoteForm : Form
 {
     readonly RemoteClient _client;
-    readonly Panel _scroll = new() { Dock = DockStyle.Fill, AutoScroll = true, BackColor = Color.FromArgb(32, 32, 32) };
+    readonly Panel _scroll = new() { Dock = DockStyle.Fill, AutoScroll = true, BackColor = Theme.Bg };
     readonly ScreenView _view = new();
     readonly ToolStripButton _viewOnly = new("Только просмотр") { CheckOnClick = true };
     readonly ToolStripButton _fit = new("По размеру окна") { CheckOnClick = true, Checked = true };
-    readonly ToolStripComboBox _quality = new() { DropDownStyle = ComboBoxStyle.DropDownList, AutoSize = false, Width = 110 };
-    readonly ToolStripLabel _stats = new() { Alignment = ToolStripItemAlignment.Right, ForeColor = Color.Gray };
+    readonly ToolStripComboBox _quality = new() { DropDownStyle = ComboBoxStyle.DropDownList, AutoSize = false, Width = 150 };
+    readonly ToolStripLabel _stats = new() { Alignment = ToolStripItemAlignment.Right, ForeColor = Theme.Muted, Font = Theme.Small };
     readonly HashSet<(ushort Vk, ushort Scan, bool Ext)> _pressed = new();
     bool _closed, _needFull = true;
     int _frames; long _bytes;
@@ -23,16 +23,34 @@ sealed class RemoteForm : Form
     public RemoteForm(RemoteClient client, Computer pc)
     {
         _client = client;
-        Text = $"{pc.Name} ({pc.Host}) — Пульт";
+        Theme.Apply(this);
+        Text = $"{pc.Name} ({pc.Host}) — Штурвал";
         Size = new Size(1280, 820);
         StartPosition = FormStartPosition.CenterScreen;
         KeyPreview = false;
 
         _quality.Items.AddRange(new object[] { "Качество: низкое", "Качество: среднее", "Качество: высокое" });
         _quality.SelectedIndex = 1;
+        _quality.ComboBox.FlatStyle = FlatStyle.Flat;
+        _quality.ComboBox.BackColor = Theme.Field;
+        _quality.ComboBox.ForeColor = Theme.Text;
+        _quality.Width = LogicalToDeviceUnits(150);
         _quality.SelectedIndexChanged += (_, _) => { _needFull = true; _view.Focus(); };
 
-        var bar = new ToolStrip { GripStyle = ToolStripGripStyle.Hidden, Padding = new Padding(4) };
+        var bar = new ToolStrip
+        {
+            GripStyle = ToolStripGripStyle.Hidden,
+            Padding = new Padding(LogicalToDeviceUnits(8), LogicalToDeviceUnits(4), LogicalToDeviceUnits(8), LogicalToDeviceUnits(4)),
+            Renderer = new DarkRenderer(),
+            BackColor = Theme.Sidebar,
+            ForeColor = Theme.Text,
+            Font = Theme.Body,
+            AutoSize = false,
+            Height = LogicalToDeviceUnits(42),
+        };
+        bar.Items.Add(new ToolStripLabel(pc.Name) { Font = new Font("Segoe UI Semibold", 10f), ForeColor = Theme.Text });
+        bar.Items.Add(new ToolStripLabel(pc.Host) { ForeColor = Theme.Muted, Font = Theme.Small });
+        bar.Items.Add(new ToolStripSeparator());
         bar.Items.Add("Ctrl+Alt+Del", null, (_, _) => { if (!_viewOnly.Checked) _client.Post(MsgType.CtrlAltDel); _view.Focus(); });
         bar.Items.Add("Win", null, (_, _) => { SendKey(0x5B, 0x5B, true, true); SendKey(0x5B, 0x5B, false, true); _view.Focus(); });
         bar.Items.Add("Вставить текст", null, (_, _) => PasteText());
@@ -42,6 +60,8 @@ sealed class RemoteForm : Form
         bar.Items.Add(_quality);
         bar.Items.Add("Обновить", null, (_, _) => { _needFull = true; _view.Focus(); });
         bar.Items.Add(_stats);
+        foreach (ToolStripItem item in bar.Items)
+            if (item is ToolStripButton) item.Padding = new Padding(LogicalToDeviceUnits(6), 0, LogicalToDeviceUnits(6), 0);
 
         _fit.CheckedChanged += (_, _) => { ApplyFit(); _view.Focus(); };
         _viewOnly.CheckedChanged += (_, _) => { ReleaseKeys(); _view.Focus(); };
@@ -122,7 +142,7 @@ sealed class RemoteForm : Form
         {
             if (_closed) return;
             _closed = true;
-            MessageBox.Show(this, $"Соединение разорвано: {ex.Message}", "Пульт", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, $"Соединение разорвано: {ex.Message}", "Штурвал", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             Close();
         }
     }
@@ -175,7 +195,7 @@ sealed class RemoteForm : Form
     {
         if (_viewOnly.Checked) return;
         var text = Clipboard.ContainsText() ? Clipboard.GetText() : "";
-        if (text.Length == 0) { MessageBox.Show(this, "В буфере обмена нет текста.", "Пульт"); return; }
+        if (text.Length == 0) { MessageBox.Show(this, "В буфере обмена нет текста.", "Штурвал"); return; }
         if (text.Length > 10_000) text = text[..10_000];
         _client.Post(MsgType.TypeText, Encoding.UTF8.GetBytes(text));
         _view.Focus();

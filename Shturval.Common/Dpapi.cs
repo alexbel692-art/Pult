@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 
-namespace Pult.Common;
+namespace Shturval.Common;
 
 /// <summary>Шифрование средствами Windows (DPAPI) — для хранения ключей и паролей на диске.</summary>
 public static class Dpapi

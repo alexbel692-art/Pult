@@ -21,23 +21,23 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Сборка агента
-        run: dotnet publish Pult.Agent/Pult.Agent.csproj -c Release -o out/agent
+        run: dotnet publish Shturval.Agent/Shturval.Agent.csproj -c Release -o out/agent
 
       - name: Сборка консоли
-        run: dotnet publish Pult.Viewer/Pult.Viewer.csproj -c Release -o out/viewer
+        run: dotnet publish Shturval.Viewer/Shturval.Viewer.csproj -c Release -o out/viewer
 
       - name: Упаковка
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force dist | Out-Null
-          Copy-Item out/agent/PultAgent.exe dist/
-          Copy-Item out/viewer/Pult.exe dist/
+          Copy-Item out/agent/ShturvalAgent.exe dist/
+          Copy-Item out/viewer/Shturval.exe dist/
           Copy-Item README.md dist/
-          Compress-Archive -Path dist/* -DestinationPath Pult-win-x64.zip -Force
+          Compress-Archive -Path dist/* -DestinationPath Shturval-win-x64.zip -Force
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Pult-win-x64
+          name: Shturval-win-x64
           path: dist/
 
       - name: Последняя сборка в Releases (каждый push в main)
@@ -48,13 +48,13 @@ jobs:
         run: |
           gh release delete latest --cleanup-tag -y 2>$null
           $global:LASTEXITCODE = 0
-          gh release create latest Pult-win-x64.zip dist/PultAgent.exe dist/Pult.exe `
+          gh release create latest Shturval-win-x64.zip dist/ShturvalAgent.exe dist/Shturval.exe `
             --target $env:GITHUB_SHA --prerelease `
             --title "Последняя сборка" `
-            --notes "Автосборка из main ($($env:GITHUB_SHA.Substring(0,7))). PultAgent.exe — на компьютеры, Pult.exe — на сервер."
+            --notes "Автосборка из main ($($env:GITHUB_SHA.Substring(0,7))). ShturvalAgent.exe — на компьютеры, Shturval.exe — на сервер."
 
       - name: Релиз (для тегов v*)
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: Pult-win-x64.zip
+          files: Shturval-win-x64.zip

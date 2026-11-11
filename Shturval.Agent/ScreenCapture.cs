@@ -1,8 +1,8 @@
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using static Pult.Agent.Native;
+using static Shturval.Agent.Native;
 
-namespace Pult.Agent;
+namespace Shturval.Agent;
 
 /// <summary>
 /// Снимает весь виртуальный экран (все мониторы) и находит изменившиеся участки,

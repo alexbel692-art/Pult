@@ -1,7 +1,7 @@
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
-namespace Pult.Viewer;
+namespace Shturval.Viewer;
 
 /// <summary>Показывает экран удалённого ПК и перехватывает мышь и клавиатуру.</summary>
 sealed class ScreenView : Control
@@ -22,7 +22,7 @@ sealed class ScreenView : Control
         SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer |
                  ControlStyles.UserPaint | ControlStyles.Selectable | ControlStyles.Opaque, true);
         TabStop = true;
-        BackColor = Color.FromArgb(32, 32, 32);
+        BackColor = Theme.Bg;
     }
 
     public bool Fit
@@ -80,7 +80,7 @@ sealed class ScreenView : Control
             if (_fb == null)
             {
                 g.Clear(BackColor);
-                TextRenderer.DrawText(g, "Получение изображения…", Font, ClientRectangle, Color.Silver,
+                TextRenderer.DrawText(g, "Получение изображения…", Theme.Body, ClientRectangle, Theme.Muted,
                     TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
                 return;
             }

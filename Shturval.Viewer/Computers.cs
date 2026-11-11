@@ -3,9 +3,9 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Pult.Common;
+using Shturval.Common;
 
-namespace Pult.Viewer;
+namespace Shturval.Viewer;
 
 sealed class Computer
 {
@@ -32,7 +32,7 @@ sealed class Computer
 static class ComputerStore
 {
     public static string FilePath =>
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Pult", "computers.json");
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Shturval", "computers.json");
 
     public static List<Computer> Load()
     {

@@ -5,17 +5,20 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyName>PultAgent</AssemblyName>
-    <RootNamespace>Pult.Agent</RootNamespace>
+    <AssemblyName>ShturvalAgent</AssemblyName>
+    <RootNamespace>Shturval.Agent</RootNamespace>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <ApplicationIcon>..\assets\shturval.ico</ApplicationIcon>
+    <Product>Штурвал</Product>
+    <Version>0.2.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Pult.Common\Pult.Common.csproj" />
+    <ProjectReference Include="..\Shturval.Common\Shturval.Common.csproj" />
     <!-- Пакет Microsoft из состава .NET: базовый класс службы Windows -->
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.1" />
   </ItemGroup>

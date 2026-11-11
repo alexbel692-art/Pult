@@ -1,14 +1,14 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Pult.Common;
+namespace Shturval.Common;
 
 public static class Proto
 {
     public const int DefaultPort = 5650;
     public const int Pbkdf2Iterations = 200_000;
     public const int SaltLength = 16;
-    public static readonly byte[] Magic = Encoding.ASCII.GetBytes("PULT1");
+    public static readonly byte[] Magic = Encoding.ASCII.GetBytes("SHTV1");
 
     /// <summary>Ключ из пароля. Агент хранит только этот ключ, а не сам пароль.</summary>
     public static byte[] DeriveKey(string password, byte[] salt) =>

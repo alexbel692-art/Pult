@@ -1,9 +1,9 @@
 using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 using System.Text;
-using static Pult.Agent.Native;
+using static Shturval.Agent.Native;
 
-namespace Pult.Agent;
+namespace Shturval.Agent;
 
 record FrameData(int Width, int Height, List<(Rectangle Rect, byte[] Jpeg)> Tiles);
 

@@ -5,16 +5,22 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyName>Pult</AssemblyName>
-    <RootNamespace>Pult.Viewer</RootNamespace>
+    <AssemblyName>Shturval</AssemblyName>
+    <RootNamespace>Shturval.Viewer</RootNamespace>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <ApplicationIcon>..\assets\shturval.ico</ApplicationIcon>
+    <Product>Штурвал</Product>
+    <Version>0.2.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Pult.Common\Pult.Common.csproj" />
+    <EmbeddedResource Include="..\assets\icon-256.png" LogicalName="logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shturval.Common\Shturval.Common.csproj" />
   </ItemGroup>
 </Project>

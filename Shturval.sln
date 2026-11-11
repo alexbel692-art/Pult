@@ -2,11 +2,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pult.Common", "Pult.Common\Pult.Common.csproj", "{1F0B7C2A-0001-4A00-9000-000000000001}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shturval.Common", "Shturval.Common\Shturval.Common.csproj", "{1F0B7C2A-0001-4A00-9000-000000000001}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pult.Agent", "Pult.Agent\Pult.Agent.csproj", "{1F0B7C2A-0002-4A00-9000-000000000002}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shturval.Agent", "Shturval.Agent\Shturval.Agent.csproj", "{1F0B7C2A-0002-4A00-9000-000000000002}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pult.Viewer", "Pult.Viewer\Pult.Viewer.csproj", "{1F0B7C2A-0003-4A00-9000-000000000003}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shturval.Viewer", "Shturval.Viewer\Shturval.Viewer.csproj", "{1F0B7C2A-0003-4A00-9000-000000000003}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

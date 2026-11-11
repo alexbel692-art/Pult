@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Pult.Agent;
+namespace Shturval.Agent;
 
 static class Native
 {
